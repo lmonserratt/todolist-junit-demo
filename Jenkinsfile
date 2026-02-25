@@ -1,12 +1,15 @@
 pipeline {
     agent any
 
+    environment {
+        // Use a clean Docker config for Jenkins so it doesn't look for docker-credential-desktop
+        DOCKER_CONFIG = "${WORKSPACE}/.docker"
+    }
+
     stages {
 
         stage('Checkout') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
 
         stage('Build & Test') {
@@ -23,7 +26,14 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh '/Applications/Docker.app/Contents/Resources/bin/docker build -t todolist-demo:${BUILD_NUMBER} .'
+                sh '''
+                    mkdir -p "$DOCKER_CONFIG"
+                    # Create a minimal docker config WITHOUT "credsStore"
+                    cat > "$DOCKER_CONFIG/config.json" <<'JSON'
+                    { "auths": {} }
+JSON
+                    /Applications/Docker.app/Contents/Resources/bin/docker build -t todolist-demo:${BUILD_NUMBER} .
+                '''
             }
         }
 
