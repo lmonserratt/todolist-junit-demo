@@ -11,13 +11,13 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'mvn clean test'
+                sh '/opt/homebrew/Cellar/maven/3.9.11/bin/mvn -B clean test'
             }
         }
 
         stage('Package') {
             steps {
-                sh 'mvn -DskipTests package'
+                sh '/opt/homebrew/Cellar/maven/3.9.11/bin/mvn -B -DskipTests package'
             }
         }
 
