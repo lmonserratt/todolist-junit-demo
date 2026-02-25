@@ -23,13 +23,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t todolist-demo:${BUILD_NUMBER} .'
+                sh '/Applications/Docker.app/Contents/Resources/bin/docker build -t todolist-demo:${BUILD_NUMBER} .'
             }
         }
 
         stage('Docker Run') {
             steps {
-                sh 'docker run --rm todolist-demo:${BUILD_NUMBER}'
+                sh '/Applications/Docker.app/Contents/Resources/bin/docker run --rm todolist-demo:${BUILD_NUMBER}'
             }
         }
     }
